@@ -18,13 +18,13 @@ st.markdown("### 📥 Enter Sample Inputs:")
 open_price = st.number_input("Open Price", value=100.0)
 high_price = st.number_input("High Price", value=110.0)
 low_price = st.number_input("Low Price", value=95.0)
-close_price = st.number_input("Close Price", value=105.0)
-volume = st.number_input("Volume", value=1000000)
+
+
 
 # Button and prediction
 if st.button("Predict"):
     try:
-        input_data = np.array([[open_price, high_price, low_price, close_price, volume]])
+        input_data = np.array([[open_price, high_price, low_price]])
         prediction = model.predict(input_data)[0]
         result = "📈 Price Will Go Up" if prediction == 1 else "📉 Price Will Go Down"
         st.success(f"Prediction: {result}")
