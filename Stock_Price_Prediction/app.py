@@ -1,5 +1,6 @@
 import joblib
 import numpy as np
+import pandas as pd
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -13,18 +14,21 @@ def predict():
     if request.method == 'POST':
         # Get input data from the request
         data = request.get_json() 
-        open_close = data['open-close']
-        low_high = data['low-high']
-        is_quarter_end = data['is_quarter_end']
-        
-        # Preprocess the input data
-        input_data = scaler.transform([[open_close, low_high, is_quarter_end]])
+
+        # Create a DataFrame from the input data
+        input_df = pd.DataFrame([data])  
+
+        # Select the relevant features
+        relevant_features = input_df[['open-close', 'low-high', 'is_quarter_end']] 
+
+        # Transform the features using the scaler
+        input_data = scaler.transform(relevant_features)  
 
         # Make prediction
-        prediction = model.predict(input_data)[0] 
+        prediction = model.predict(input_data)[0]  
 
         # Return the prediction as JSON response
-        return jsonify({'prediction': int(prediction)}) 
+        return jsonify({'prediction': int(prediction)})  
     else:
         return "Welcome to Tesla Stock Price prediction!"
 
